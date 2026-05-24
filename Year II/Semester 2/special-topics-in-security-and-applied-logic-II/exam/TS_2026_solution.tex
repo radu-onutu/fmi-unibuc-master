@@ -1,0 +1,229 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{array}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  urlcolor=blue!60!black
+}
+
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\Ham}{\operatorname{Ham}}
+\newcommand{\Sim}{\operatorname{Sim}}
+\newcommand{\ket}[1]{\lvert#1\rangle}
+\newcommand{\bra}[1]{\langle#1\rvert}
+
+\title{\textbf{Special topics in logic and security II\\Exam solutions --- May 21, 2026}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 1 --- A control matrix for $\Ham_3(3)$}
+
+By definition (codingth.pdf, \S4), $\Ham_q(k)$ is the linear code over $\F_q$ whose check matrix has as columns the $n=\frac{q^k-1}{q-1}$ representatives of the projective points in $\PP^{k-1}(\F_q)$.
+
+For $q=k=3$ we get $n=\frac{3^3-1}{3-1}=13$. We list the $13$ projective points of $\PP^{2}(\F_3)$ in normalised form (first non-zero coordinate equal to $1$) and place them as columns of $H\in M_{3\times 13}(\F_3)$:
+\[
+H \;=\; \left(\begin{array}{ccccccccc|ccc|c}
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 1 & 1 & 2 & 2 & 2 & 1 & 1 & 1 & 0\\
+0 & 1 & 2 & 0 & 1 & 2 & 0 & 1 & 2 & 0 & 1 & 2 & 1
+\end{array}\right).
+\]
+Since $\operatorname{rk}H=3$ (the first, tenth and thirteenth columns are $e_1,e_2,e_3$), $H$ is indeed a valid check (= control) matrix of the $[13,10,3]$ code $\Ham_3(3)$. Any two columns of $H$ are linearly independent (distinct projective points), but $\langle h_1\rangle, \langle h_2\rangle, \langle h_1+h_2\rangle$ are linearly dependent, so $d(\Ham_3(3))=3$.
+
+\section*{Problem 2 --- Weight polynomial of $\Sim_3(3)$}
+
+The simplex code $\Sim_q(k)$ has the generating matrix equal to the check matrix of $\Ham_q(k)$, hence parameters $\bigl[\tfrac{q^k-1}{q-1},\,k,\,q^{k-1}\bigr]$. The theorem in \S4 of codingth.pdf states that \emph{every} nonzero codeword of $\Sim_q(k)$ has the same weight $q^{k-1}$.
+
+For $\Sim_3(3)$: $n=13$, $k=3$, every nonzero word has weight $3^{2}=9$, and $|\Sim_3(3)|=3^3=27$. Therefore
+\[
+\boxed{\,A_{\Sim_3(3)}(z) \;=\; 1 \;+\; 26\,z^{9}\,}
+\]
+
+\section*{Problem 3 --- Weight polynomial of $\Ham_3(3)$ via MacWilliams}
+
+Because $\Sim_q(k)=\Ham_q(k)^{\perp}$, MacWilliams' formula (codingth.pdf, Thm.~14.2) gives
+\[
+A_{\Ham_3(3)}(z)
+\;=\; q^{-k}\,(1+(q-1)z)^{n}\,A_{\Sim_3(3)}\!\!\left(\frac{1-z}{1+(q-1)z}\right)
+\]
+with $q=3$, $n=13$, $k=3$ (the dimension of the inner code $\Sim_3(3)$):
+\[
+A_{\Ham_3(3)}(z)
+\;=\;\frac{1}{27}(1+2z)^{13}\!\left[\,1+26\!\left(\frac{1-z}{1+2z}\right)^{\!9}\,\right]
+\;=\;\frac{(1+2z)^{13}+26\,(1-z)^{9}(1+2z)^{4}}{27}.
+\]
+
+\paragraph{Expansion.} Computing the two summands:
+
+\smallskip
+\noindent$(1+2z)^{13}=\sum_{k=0}^{13}\binom{13}{k}2^{k}z^{k}$ has coefficients
+\[
+[\,1,\,26,\,312,\,2288,\,11440,\,41184,\,109824,\,219648,\,329472,\,366080,\,292864,\,159744,\,53248,\,8192\,].
+\]
+$(1-z)^{9}(1+2z)^{4}$ has coefficients
+\[
+[\,1,\,-1,\,-12,\,20,\,46,\,-126,\,-12,\,300,\,-279,\,-121,\,400,\,-312,\,112,\,-16\,].
+\]
+Multiplying the second row by $26$, adding the two rows term-by-term and dividing by $27$ yields the weight distribution $A_{i}$ of $\Ham_3(3)$:
+\[
+\begin{array}{|c|r|}\hline
+ i & A_{i} \\\hline
+ 0 & 1 \\
+ 1 & 0 \\
+ 2 & 0 \\
+ 3 & 104 \\
+ 4 & 468 \\
+ 5 & 1404 \\
+ 6 & 4056 \\
+ 7 & 8424 \\\hline
+\end{array}\qquad
+\begin{array}{|c|r|}\hline
+ i & A_{i}\\\hline
+ 8 & 11934\\
+ 9 & 13442\\
+ 10 & 11232\\
+ 11 & 5616\\
+ 12 & 2080\\
+ 13 & 288\\
+ \multicolumn{2}{|c|}{\sum_i A_i = 59049 = 3^{10}}\\\hline
+\end{array}
+\]
+Hence
+\[
+\boxed{
+\begin{aligned}
+A_{\Ham_3(3)}(z)\;=\;& 1 + 104\,z^{3} + 468\,z^{4} + 1404\,z^{5} + 4056\,z^{6} + 8424\,z^{7} + 11934\,z^{8}\\
+& + 13442\,z^{9} + 11232\,z^{10} + 5616\,z^{11} + 2080\,z^{12} + 288\,z^{13}.
+\end{aligned}}
+\]
+
+\paragraph{Consistency check.}
+$A_{\Ham_3(3)}(1)=3^{10}=59049=|C|$ ✓, and $A_1=A_2=0$ as required by $d=3$. Moreover $A_3=104$ can be verified directly by combinatorics in $\PP^{2}(\F_3)$: the projective plane has $13$ lines, each containing $q+1=4$ points; collinear unordered triples are $13\cdot\binom{4}{3}=52$, and each gives $q-1=2$ weight-$3$ codewords (the non-zero scalar multiples of the unique dependence), yielding $52\cdot 2=104$. ✓
+
+\section*{Problem 4 --- $W_2\otimes W_2$ is unitary on $H_4$}
+
+Recall the Hadamard--Walsh matrix
+\(
+W_2=\dfrac{1}{\sqrt 2}\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix}.
+\)
+Using the block definition of the Kronecker product,
+\[
+W_2\otimes W_2
+\;=\;\frac{1}{\sqrt 2}\begin{pmatrix}W_2 & W_2\\ W_2 & -W_2\end{pmatrix}
+\;=\;\frac{1}{2}
+\begin{pmatrix}
+1 & 1 & 1 & 1\\
+1 & -1 & 1 & -1\\
+1 & 1 & -1 & -1\\
+1 & -1 & -1 & 1
+\end{pmatrix} \;=:\; W_4 .
+\]
+
+\paragraph{Unitarity --- tensor argument.}
+$W_2$ is real symmetric and satisfies $W_2^{2}=\tfrac12\bigl(\begin{smallmatrix}2&0\\0&2\end{smallmatrix}\bigr)=I_2$, so $W_2^{*}=W_2=W_2^{-1}$. Applying the mixed-product property (Problem 5 of the previous exam):
+\[
+(W_2\otimes W_2)^{*}(W_2\otimes W_2)
+\;=\;(W_2^{*}\otimes W_2^{*})(W_2\otimes W_2)
+\;=\;W_2^{*}W_2\otimes W_2^{*}W_2
+\;=\;I_2\otimes I_2 = I_4 .
+\]
+
+\paragraph{Unitarity --- direct computation.}
+$W_4$ is real symmetric, so $W_4^{*}=W_4$. Compute $W_4^{2}$: each row of the $\pm1$ matrix has Euclidean square-norm $4$, and any two distinct rows are orthogonal (each pair of rows differs in exactly two positions, contributing $+1+1$ minus $+1+1=0$). Therefore the $4\times 4$ $\pm1$ matrix squared equals $4 I_4$, and $W_4^{2}=\frac{1}{4}\cdot 4 I_4 = I_4$. Hence $W_4^{*}W_4=I_4$, i.e.\ $W_4$ is unitary on $H_4$.
+
+\section*{Problem 5 --- Real system characterising $A\in U(2)$}
+
+Write $A=\begin{pmatrix}\alpha & \gamma\\ \varepsilon & \eta\end{pmatrix}$ with $\alpha=a+ib$, $\gamma=c+id$, $\varepsilon=e+if$, $\eta=g+ih$ and $a,b,\dots,h\in\R$. By definition $A$ is unitary iff $A^{*}A=I_2$, where
+\[
+A^{*}A\;=\;\begin{pmatrix}
+\lvert\alpha\rvert^{2}+\lvert\varepsilon\rvert^{2} & \bar\alpha\gamma+\bar\varepsilon\eta\\
+\overline{\bar\alpha\gamma+\bar\varepsilon\eta} & \lvert\gamma\rvert^{2}+\lvert\eta\rvert^{2}
+\end{pmatrix}.
+\]
+The two diagonal entries give
+\[
+\lvert\alpha\rvert^{2}+\lvert\varepsilon\rvert^{2}=a^{2}+b^{2}+e^{2}+f^{2},
+\qquad
+\lvert\gamma\rvert^{2}+\lvert\eta\rvert^{2}=c^{2}+d^{2}+g^{2}+h^{2}.
+\]
+The off-diagonal entry is
+\[
+\bar\alpha\gamma+\bar\varepsilon\eta
+=(a-ib)(c+id)+(e-if)(g+ih)
+=\underbrace{(ac+bd+eg+fh)}_{\Re}+\,i\,\underbrace{(ad-bc+eh-fg)}_{\Im}.
+\]
+Setting $A^{*}A=I_2$ is equivalent to the four real equations
+\[
+\boxed{\;\;
+\begin{aligned}
+\text{(N$_1$)}\quad & a^{2}+b^{2}+e^{2}+f^{2}=1,\\
+\text{(N$_2$)}\quad & c^{2}+d^{2}+g^{2}+h^{2}=1,\\
+\text{(O$_1$)}\quad & ac+bd+eg+fh=0,\\
+\text{(O$_2$)}\quad & ad-bc+eh-fg=0.
+\end{aligned}\;\;}
+\]
+(N$_1$), (N$_2$) say that the columns of $A$ have unit Hermitian norm; (O$_1$), (O$_2$) say that the columns are orthogonal in $\C^{2}$.
+
+\paragraph{Supplementary 1: $\dim_{\R} U(2)$.}
+The eight real parameters $a,b,\dots,h$ are subject to the four real equations above, and these are independent at any unitary matrix (the differential of the map $A\mapsto A^{*}A-I_2$ has constant rank $4$ on $U(2)$, since the target space of Hermitian matrices is $4$-dimensional over $\R$). Hence $U(2)$ is a smooth real submanifold of $\R^{8}$ of dimension
+\[
+\dim_{\R} U(2)\;=\;8-4\;=\;4,
+\]
+which agrees with the standard formula $\dim_{\R}U(n)=n^{2}$.
+
+\paragraph{Supplementary 2: A single polynomial equation.}
+Yes. Summing the squares of the residuals of (N$_1$)--(O$_2$) gives the real polynomial
+\[
+E(a,b,c,d,e,f,g,h)\;=\;
+\bigl(a^{2}+b^{2}+e^{2}+f^{2}-1\bigr)^{2}
++\bigl(c^{2}+d^{2}+g^{2}+h^{2}-1\bigr)^{2}
++\bigl(ac+bd+eg+fh\bigr)^{2}
++\bigl(ad-bc+eh-fg\bigr)^{2}.
+\]
+Since $E$ is a sum of squares of real numbers, $E\ge 0$ everywhere on $\R^{8}$, with $E=0$ iff each of the four summands vanishes, iff (N$_1$)--(O$_2$) all hold, iff $A$ is unitary. So $\{E=0\}=U(2)$. The example shows that a single real polynomial equation can carve out a positive-codimension variety because the squaring trick converts a system into one equation while preserving the zero locus.
+
+\section*{Problem 6 --- The parallelogram identity for a qubit}
+
+Let $q=a\ket{0}+b\ket{1}$ with $a,b\in\C$, $|a|^{2}+|b|^{2}=1$.
+
+\paragraph{Solution 1 --- algebraic, via $\lvert z\rvert^{2}=z\bar z$.}
+\begin{align*}
+\lvert a+b\rvert^{2} &= (a+b)\overline{(a+b)} = (a+b)(\bar a+\bar b) = \lvert a\rvert^{2}+a\bar b+b\bar a+\lvert b\rvert^{2},\\
+\lvert a-b\rvert^{2} &= (a-b)(\bar a-\bar b) = \lvert a\rvert^{2}-a\bar b-b\bar a+\lvert b\rvert^{2}.
+\end{align*}
+Adding the two lines, the cross terms $\pm(a\bar b+b\bar a)$ cancel and
+\[
+\lvert a+b\rvert^{2}+\lvert a-b\rvert^{2}\;=\;2\bigl(\lvert a\rvert^{2}+\lvert b\rvert^{2}\bigr)\;=\;2\cdot 1\;=\;2.
+\]
+
+\paragraph{Solution 2 --- quantum, applying the Hadamard gate $W_2$.}
+\[
+W_2\,q\;=\;\frac{1}{\sqrt 2}\begin{pmatrix}1 & 1\\ 1 & -1\end{pmatrix}\!\begin{pmatrix}a\\ b\end{pmatrix}
+\;=\;\frac{a+b}{\sqrt 2}\ket{0}\;+\;\frac{a-b}{\sqrt 2}\ket{1}.
+\]
+Because $W_2$ is unitary it preserves norms, so $W_2 q$ is again a unit quantum state. Hence the squared amplitudes sum to $1$:
+\[
+\left\lvert\frac{a+b}{\sqrt 2}\right\rvert^{2}+\left\lvert\frac{a-b}{\sqrt 2}\right\rvert^{2}=1
+\;\;\Longleftrightarrow\;\;
+\lvert a+b\rvert^{2}+\lvert a-b\rvert^{2}=2.\qquad\blacksquare
+\]
+
+\end{document}

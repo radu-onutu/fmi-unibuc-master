@@ -1,0 +1,15 @@
+.venv
+__pycache__
+*.pyc
+.git
+.github
+.idea
+.vscode
+.env
+.env.*
+!.env.example
+frontend
+docs
+.claude
+*.md
+.DS_Store
