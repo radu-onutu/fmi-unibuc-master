@@ -3,9 +3,9 @@
 Graduate study materials from the **University of Bucharest, Faculty of Mathematics
 and Computer Science (FMI)**.
 
-- **Field of study (*domeniu*):** Computer Science
-- **Master's programme (*program de master*):** Security and Applied Logic (*securitate și logică aplicată*)
-- **Degree:** Master's (*masterat*), 2024–2026
+- **Field of study:** Computer Science
+- **Master's programme:** Security and Applied Logic (*securitate și logică aplicată*)
+- **Degree:** Master's, 2024–2026
 
 ### Year I – Semester 1
 | No. | Course |
